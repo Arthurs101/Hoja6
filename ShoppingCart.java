@@ -1,8 +1,10 @@
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,12 +31,12 @@ public class ShoppingCart<K> {
                 i++;
                 temp = item + " No." + String.valueOf(i);
             }
-            cart.put((item +" No." + String.valueOf(i)), categoty);
-            amount.put(item, i+1);
+            cart.put((item.toLowerCase() +" No." + String.valueOf(i)), categoty);
+            amount.put(item.toLowerCase(), i+1);
             
         } else {
-            cart.put(item, categoty );
-            amount.put(item, 1);
+            cart.put(item.toLowerCase(), categoty );
+            amount.put(item.toLowerCase(), 1);
         }
     }
     
@@ -47,9 +49,40 @@ public class ShoppingCart<K> {
         } 
         );
     }
+    /*
+    Ordena por categoria (Ordenado por valor) y luego imprime el listado de productos
+    */
     public void showSorted () {
-    
+        SortByType bvc = new SortByType(this.cart);
+        Map sorted_map = new TreeMap(bvc);
+        sorted_map.forEach((K,V) -> {
+            if(amount.containsKey(K)){
+                System.out.println(K + "\tde categoria\t" + String.valueOf(V) + "\t en carrito " + String.valueOf(amount.get(K)) + " unidades" );
+            }
+        }
+        );
     
     }
 }
+/*
+Clase de ordenamiento por categoria
+*/
+class SortByType<K,V> implements Comparator<K>{ 
+    Map<K, V> base;
+
+    public SortByType(Map<K, V> base) {
+        this.base = base;
+    }
+    
+    @Override
+    public int compare(K sub1, K sub2) {
+        if(String.valueOf(base.get(sub1)).compareTo(String.valueOf(base.get(sub2))) >= 0){
+            return 1;
+        }else{
+            return -1;
+        }
+    }
+}
+
+
 
