@@ -1,12 +1,13 @@
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 public class ShoppingCart<K> {
     private Map cart;
@@ -44,45 +45,36 @@ public class ShoppingCart<K> {
     Metodo que mestra la descripcion y cantidad de cada producto en su coleccion usando regrex 
     */
     public void showproducts(){
+        if(!amount.isEmpty()){
         amount.forEach( (K,V) -> {
             System.out.println(K + "\t" + String.valueOf(cart.get(K)) + "\t en carrito " + String.valueOf(V) + " unidades" );
         } 
         );
+        }else{
+            System.out.println("No articles");
+        }
     }
     /*
     Ordena por categoria (Ordenado por valor) y luego imprime el listado de productos
     */
     public void showSorted () {
-        SortByType bvc = new SortByType(this.cart);
-        Map sorted_map = new TreeMap(bvc);
-        sorted_map.forEach((K,V) -> {
+        if(!amount.isEmpty()){
+        Stream<Map.Entry<String, String>> sorted = cart.entrySet().stream().sorted(Map.Entry.comparingByValue());
+        LinkedHashMap<String,String> resultMAP = sorted.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        resultMAP.forEach((K,V) -> {
             if(amount.containsKey(K)){
                 System.out.println(K + "\tde categoria\t" + String.valueOf(V) + "\t en carrito " + String.valueOf(amount.get(K)) + " unidades" );
             }
         }
         );
     
-    }
-}
-/*
-Clase de ordenamiento por categoria
-*/
-class SortByType<K,V> implements Comparator<K>{ 
-    Map<K, V> base;
-
-    public SortByType(Map<K, V> base) {
-        this.base = base;
-    }
     
-    @Override
-    public int compare(K sub1, K sub2) {
-        if(String.valueOf(base.get(sub1)).compareTo(String.valueOf(base.get(sub2))) >= 0){
-            return 1;
-        }else{
-            return -1;
-        }
+    }else{
+        System.out.println("No articles");
+    }
     }
 }
+
 
 
 
