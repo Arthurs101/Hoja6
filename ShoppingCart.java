@@ -1,10 +1,8 @@
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,15 +23,7 @@ public class ShoppingCart<K> {
     //revisar si no existe en los productos existentes, para evitar colision 
         if(cart.containsKey(item.toLowerCase())){//ya contiene el elemento
             //indice de repeticion de elemento
-            int i = 1;
-            String temp = item;
-            temp += " No." + String.valueOf(i);
-            while(cart.containsKey(temp.toLowerCase())){//ver el indice disponible
-                i++;
-                temp = item + " No." + String.valueOf(i);
-            }
-            cart.put((item.toLowerCase() +" No." + String.valueOf(i)), categoty);
-            amount.put(item.toLowerCase(), i+1);
+            amount.put(item.toLowerCase(), amount.get(item)+1);
             
         } else {
             cart.put(item.toLowerCase(), categoty );

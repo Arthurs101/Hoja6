@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import java.util.HashMap;
+import java.util.InputMismatchException;
 
 import java.util.Map;
 
@@ -22,13 +23,13 @@ public class Main {
         Leer el archivo de datos
         */
         //String del path usado para testing en mi pc
-        String path = "D:\\Universidad\\SEMESTRE 3\\Algoritmos y Datos\\Hoja6\\ListadoProducto.txt"; 
+        //String path = "D:\\Universidad\\SEMESTRE 3\\Algoritmos y Datos\\Hoja6\\ListadoProducto.txt"; 
         HashMap data = new HashMap<String,String>();
         Scanner scan = new Scanner(System.in);
         HashFactory fabric = new HashFactory<String,String>();
         ShoppingCart user; //coleccion del usuario
-        
-        //String path = scan.nextLine();
+        System.out.println("Ingrese la ubicacion del archivo ListadoProducto.txt");
+        String path = scan.nextLine();
         
         try{
             BufferedReader bf = new BufferedReader(new FileReader(path));
@@ -68,47 +69,59 @@ public class Main {
             System.out.println("4. Mostrar detalle del carrito ordenado por categoria");
             System.out.println("5. Mostrar inventario de tienda");
             System.out.println("6. Mostrar inventario de tienda por tipo");
-            int opt = scan.nextInt();
-            switch(opt){
-                case 1 ->{
-                    System.out.println("Ingrese el nombre del producto a comprar");
-                    Scanner scantemp = new Scanner(System.in);
-                    String product = scantemp.nextLine();
-                    if(data.containsKey(product.toLowerCase())){//ver si existe el producto
-                        user.buy(product.toLowerCase(), (String) data.get(product));
-                    }else{
-                        System.out.println("Producto inexistente");
+            System.out.println("7. Salir");
+            try{
+                int opt = scan.nextInt();
+                switch(opt){
+                    case 1 ->{
+                        System.out.println("Ingrese el nombre del producto a comprar");
+                        Scanner scantemp = new Scanner(System.in);
+                        String product = scantemp.nextLine();
+                        if(data.containsKey(product.toLowerCase())){//ver si existe el producto
+                            user.buy(product.toLowerCase(), (String) data.get(product));
+                        }else{
+                            System.out.println("Producto inexistente");
+                        }
+                    }
+                    case 2 ->{
+                        System.out.println("Ingrese el nombre del producto");
+                        Scanner scantemp = new Scanner(System.in);
+                        String product = scantemp.nextLine();
+                        if(data.containsKey(product.toLowerCase())){//ver si existe el producto
+                            System.out.println("su producto buscado es de categoria " + data.get(product.toLowerCase()));
+                        }else{
+                            System.out.println("Producto inexistente");
+                        }
+                    }
+                    case 3 ->{
+                        user.showproducts();
+                    }
+                    case 4 ->{
+                        user.showSorted();
+                    }
+                    case 5 ->{
+                        if(!data.isEmpty()){
+                        data.forEach((K,V) -> {System.out.println(V + "||" + K);} );
+                        }
+
+                    }
+                    case 6 ->{
+                        if(!data.isEmpty()){
+                        Stream<Map.Entry<String, String>> sorted = data.entrySet().stream().sorted(Map.Entry.comparingByValue());
+                        sorted.forEach(System.out::println);
+                        }
+                    }
+                    case 7 ->{
+                        System.exit(0);
                     }
                 }
-                case 2 ->{
-                    System.out.println("Ingrese el nombre del producto");
-                    Scanner scantemp = new Scanner(System.in);
-                    String product = scantemp.nextLine();
-                    if(data.containsKey(product.toLowerCase())){//ver si existe el producto
-                        System.out.println("su producto buscado es de categoria " + data.get(product.toLowerCase()));
-                    }else{
-                        System.out.println("Producto inexistente");
-                    }
-                }
-                case 3 ->{
-                    user.showproducts();
-                }
-                case 4 ->{
-                    user.showSorted();
-                }
-                case 5 ->{
-                    if(!data.isEmpty()){
-                    data.forEach((K,V) -> {System.out.println(V + "||" + K);} );
-                    }
-                    
-                }
-                case 6 ->{
-                    if(!data.isEmpty()){
-                    Stream<Map.Entry<String, String>> sorted = data.entrySet().stream().sorted(Map.Entry.comparingByValue());
-                    sorted.forEach(System.out::println);
-                    }
-                }
+            }catch(InputMismatchException IE){
+                    System.out.println("Entrada no valida");
             }
+            catch(Exception W){
+                System.out.println("Error inesperado");
+            }
+            
         }
         
     }
