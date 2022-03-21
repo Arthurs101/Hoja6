@@ -23,13 +23,14 @@ public class Main {
         Leer el archivo de datos
         */
         //String del path usado para testing en mi pc
-        //String path = "D:\\Universidad\\SEMESTRE 3\\Algoritmos y Datos\\Hoja6\\ListadoProducto.txt"; 
+        String path = "D:\\Universidad\\SEMESTRE 3\\Algoritmos y Datos\\Hoja6\\ListadoProducto.txt"; 
         HashMap data = new HashMap<String,String>();
         Scanner scan = new Scanner(System.in);
         HashFactory fabric = new HashFactory<String,String>();
         ShoppingCart user; //coleccion del usuario
-        System.out.println("Ingrese la ubicacion del archivo ListadoProducto.txt");
+        /*System.out.println("Ingrese la ubicacion del archivo ListadoProducto.txt");
         String path = scan.nextLine();
+        */
         
         try{
             BufferedReader bf = new BufferedReader(new FileReader(path));
@@ -117,9 +118,11 @@ public class Main {
                 }
             }catch(InputMismatchException IE){
                     System.out.println("Entrada no valida");
+                    scan.next();
             }
             catch(Exception W){
                 System.out.println("Error inesperado");
+                scan.next();
             }
             
         }
